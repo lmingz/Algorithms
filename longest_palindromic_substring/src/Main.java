@@ -2,7 +2,7 @@ public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-        String test_string = "aaassssaaassassaas";
+        String test_string = "caba";
         Solution s = new Solution();
         System.out.println(s.longestPalindrome(test_string));
     }
@@ -13,64 +13,48 @@ class Solution {
             return s;
         }
         int center = 0, range = 0;
-        int largest_range = 0, selected_center = 0;
-        Boolean even_center = null;
+        int start = 0, end = 0;
 
 
-        for (center = 0; center < s.length(); center++){
-            for (range = largest_range; center - range >= 0 && center + range + 1 <= s.length() ; range ++){
+        for (center = 0; center + (end - start)/2 - 1 < s.length(); center++){
+            for (range = (end-start)/2; center - range >= 0 && center + range < s.length() && end != s.length() - 1; range ++){
 
-                if (is_palindromic_odd (s, center, range)){
-                    if (range > largest_range){
-                        selected_center = center;
-                        largest_range = range;
-                        even_center = false;
+
+                String odd_substring = s.substring(center - range, center + range + 1);
+
+                if (string_is_palindromic (odd_substring)){
+                    if (range * 2 > end - start){
+                        start = center - range;
+                        end = center + range;
                     }
                 }
                 if (center + range + 1 < s.length()){
-                    if (is_palindromic_even(s, center, range)){
-                        if (range >= largest_range){
-                            selected_center = center;
-                            largest_range = range;
-                            even_center = true;
+                    String even_substring = s.substring(center - range, center + range + 2);
+                    if (string_is_palindromic (even_substring)) {
+                        if (range * 2 >= end - start) {
+                            start = center - range;
+                            end = center + range + 1;
                         }
                     }
                 }
             }
         }
-        if (even_center == null){
+        if (start == end){
             return s.substring(0,1);
         }
-        else if (even_center){
-            return s.substring(selected_center - largest_range, selected_center + largest_range + 2);
-        }
-        else{
-            return s.substring(selected_center - largest_range, selected_center + largest_range + 1);
-        }
+        return s.substring(start,end + 1);
+
 
 
     }
-    public Boolean is_palindromic_even (String s, int center, int range) {
+    private Boolean string_is_palindromic (String s) {
         int index = 0;
-        String sub_s = s.substring(center - range, center + range + 2);
-        for (index = 0; index < sub_s.length()/2; index ++){
-            if (sub_s.charAt(index) != sub_s.charAt(sub_s.length() - 1 - index)) {
+        for (index = 0; index < s.length()/2; index ++){
+            if (s.charAt(index) != s.charAt(s.length() - 1 - index)) {
                 return false;
             }
         }
         return true;
     }
 
-
-
-    public Boolean is_palindromic_odd(String s, int center, int range){
-        int index = 0;
-        String sub_s = s.substring(center - range, center + range + 1);
-        for (index = 0; index < sub_s.length()/2; index ++){
-            if (sub_s.charAt(index) != sub_s.charAt(sub_s.length() - 1 - index)) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
