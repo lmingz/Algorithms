@@ -21,13 +21,14 @@ class Solution {
 
 
                 String odd_substring = s.substring(center - range, center + range + 1);
-
+                // Check if odd substring is longer than current longest substring
                 if (string_is_palindromic (odd_substring)){
                     if (range * 2 > end - start){
                         start = center - range;
                         end = center + range;
                     }
                 }
+                // Check if even substring is longer than current longest substring
                 if (center + range + 1 < s.length()){
                     String even_substring = s.substring(center - range, center + range + 2);
                     if (string_is_palindromic (even_substring)) {
@@ -43,9 +44,6 @@ class Solution {
             return s.substring(0,1);
         }
         return s.substring(start,end + 1);
-
-
-
     }
     private Boolean string_is_palindromic (String s) {
         int index = 0;
